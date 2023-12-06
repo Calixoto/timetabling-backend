@@ -21,24 +21,35 @@ model User {
 }
 
 model Classroom {
-  id       String   @id @default(uuid())
+  id       String @id @default(uuid())
   name     String
   capacity Int
   location String
-  courses  Course[]
+  // courses  Course[]
 
   @@map("class_room")
 }
 
 model Course {
-  id            String    @id @default(uuid())
-  name          String
-  code          String
-  capacity      Int
-  schedule      String[]
-  Classroom     Classroom @relation(fields: [class_room_id], references: [id])
-  class_room_id String
+  id          String   @id @default(uuid())
+  semester    Int
+  class_id    String
+  class_name  String
+  room        String
+  room_space  Int
+  schedule_id String
+  schedule    Schedule @relation(fields: [schedule_id], references: [id])
 
-  @@index([class_room_id])
+  @@index([schedule_id])
   @@map("courses")
+}
+
+model Schedule {
+  id         String   @id @default(uuid())
+  weekday    String
+  schedule   String
+  created_at DateTime @default(now())
+  courses    Course[]
+
+  @@map("schedule")
 }
